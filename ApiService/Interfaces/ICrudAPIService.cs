@@ -41,6 +41,6 @@ namespace ApiService.Interfaces
         /// </summary>
         /// <param name="dto">Id of the entity to delete.</param>
         /// <returns>Boolean indicating success</returns>
-        Task<bool> Remove(int id);
+        Task<bool> Delete(int id);
     }
 }

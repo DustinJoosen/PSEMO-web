@@ -124,7 +124,7 @@ namespace ApiService.Services
         /// </summary>
         /// <param name="dto">Id of the entity to delete.</param>
         /// <returns>Boolean indicating success</returns>
-        public async Task<bool> Remove(int id)
+        public async Task<bool> Delete(int id)
         {
             try
             {
