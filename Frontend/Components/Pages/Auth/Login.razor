@@ -1,14 +1,32 @@
 ﻿@page "/auth/login"
+@rendermode InteractiveServer
 
-<PageTitle>Login</PageTitle>
+<PageTitle>Inloggen</PageTitle>
 
-<h3>Login</h3>
 
-<p>
-    Welkom bij de inlog pagina<br/>
-    <a class="text-center" href="/auth/register">Ik heb nog geen account.</a>
-</p>
+<div class="login-main-box-holder">
+    <div class="w-25 login-main-box">
+        <h3 class="my-4">Inloggen</h3>
+        <EditForm method="post" Model="LoginForm" FormName="sign-in" OnValidSubmit="@Submit" >
+            <div class="form-group">
+                <InputText type="email" class="form-control" @bind-Value="LoginForm.EmailAddress" placeholder="E-mailadres"/>
+            </div>
+            <div class="form-group">
+                <InputText type="password" class="form-control" @bind-Value="LoginForm.Password" placeholder="Wachtwoord"/>
+            </div>
+            <button class="submit-button" type="submit">Inloggen</button>
+            <p><a href="/auth/register">Nog geen account?</a></p>
+        </EditForm>
+    </div>
+</div>
+
 
 @code {
+    [SupplyParameterFromForm]
+    public LoginDTO LoginForm { get; set; } = new();
 
+    private void Submit()
+    {
+        
+    }
 }

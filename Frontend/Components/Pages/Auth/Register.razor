@@ -1,17 +1,39 @@
 ﻿@page "/auth/register"
+@rendermode InteractiveServer
 
 <PageTitle>Registreren</PageTitle>
 
 
+<div class="registration-main-box-holder">
+    <div class="w-25 registration-main-box">
+        <h3 class="my-4">Registreren</h3>
+        <EditForm method="post" Model="Registration" FormName="sign-up" OnValidSubmit="@Submit" >
+            <div class="form-group">
+                <InputText type="text" class="form-control" @bind-Value="Registration.Username" placeholder="Gebruikersnaam"/>
+            </div>
+            <div class="form-group">
+                <InputText type="email" class="form-control" @bind-Value="Registration.EmailAddress" placeholder="E-mailadres"/>
+            </div>
+            <div class="form-group">
+                <InputText type="password" class="form-control" @bind-Value="Registration.Password" placeholder="Wachtwoord"/>
+            </div>
+            <div class="form-group">
+                <InputText type="password" class="form-control" @bind-Value="Registration.PasswordConfirmation" placeholder="Bevestig wachtwoord"/>
+            </div>
 
-<h3>Registreren</h3>
-
-<p>
-    Welkom bij de registratie pagina<br/>
-    <a href="/auth/login">Ik heb al een account.</a>
-</p>
+            <button class="submit-button" type="submit">Aanmelden</button>
+            <p><a href="/auth/login">Ik heb al een account</a></p>
+        </EditForm>
+    </div>
+</div>
 
 
 @code {
+    [SupplyParameterFromForm]
+    public RegistrationDTO Registration { get; set; } = new();
 
+    private void Submit()
+    {
+        
+    }
 }

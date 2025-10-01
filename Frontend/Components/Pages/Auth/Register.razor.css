@@ -2,3 +2,37 @@
 h3, p, a {
     text-align: center;
 }
+
+
+.registration-main-box-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.registration-main-box {
+    border: 1px solid var(--main-orange);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 1px 1px 10px var(--main-lightred);
+    /* TEMP */ margin-top: 100px;
+}
+
+.registration-main-box .form-group {
+    margin: 10px;
+    border-radius: 8px;
+
+}
+
+.submit-button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 3px;
+    background: none;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
