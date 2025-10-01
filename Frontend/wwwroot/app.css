@@ -2,6 +2,13 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+:root {
+    --main-darkblue: #2F4858;
+    --main-purple: #885c93;
+    --main-orange: #FF751A;
+    --main-lightred: #FF7171;
+}
+
 a, .btn-link {
     color: #006bb7;
 }
