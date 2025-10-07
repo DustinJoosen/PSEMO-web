@@ -1,27 +1,14 @@
 ﻿using ApiService.Interfaces;
 using Infrastructure.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace ApiService.Services
 {
-    public class AuthService : IAuthService
+    public class AuthService : CrudAPIService, IAuthService
     {
-        private HttpClient _client;
-
-        private JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        public AuthService(HttpClient client) : base(client)
         {
-            PropertyNameCaseInsensitive = true,
-            WriteIndented = true
-        };
-
-        public AuthService(HttpClient client)
-        {
-            this._client = client;
         }
 
         /// <summary>
@@ -31,21 +18,8 @@ namespace ApiService.Services
         /// <returns>The JWT token.</returns>
         public async Task<string?> Login(LoginDTO login)
         {
-            try
-            {
-                var json = JsonSerializer.Serialize(login, this._jsonOptions);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await this._client.PostAsync("api/auth/login", content);
-
-                if (!response.IsSuccessStatusCode)
-                    return null;
-
-                return await response.Content.ReadAsStringAsync();
-            }
-            catch
-            {
-                return null;
-            }
+            string? response = await this.Post<LoginDTO>("api/auth/login", login);
+            return response;
         }
 
         /// <summary>
@@ -55,21 +29,8 @@ namespace ApiService.Services
         /// <returns>The JWT token.</returns>
         public async Task<string?> Register(RegistrationDTO registration)
         {
-            try
-            {
-                var json = JsonSerializer.Serialize(registration, this._jsonOptions);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await this._client.PostAsync("api/auth/register", content);
-
-                if (!response.IsSuccessStatusCode)
-                    return null;
-
-                return await response.Content.ReadAsStringAsync();
-            }
-            catch
-            {
-                return null;
-            }
+            string? response = await this.Post<RegistrationDTO>("api/auth/register", registration);
+            return response;
         }
 
     }
