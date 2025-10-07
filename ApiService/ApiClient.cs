@@ -12,7 +12,7 @@ namespace ApiService
     {
         private HttpClient _client;
 
-        public IWeatherForecastApiService WeatherForecastApiService { get; set; }
+        public IAuthService AuthService { get; set; }
 
         public ApiClient(HttpClient client)
         {
@@ -20,7 +20,7 @@ namespace ApiService
             if (this._client== null)
                 return;
 
-            this.WeatherForecastApiService = new WeatherForecastApiService(client);
+            this.AuthService = new AuthService(client);
         }
 
         public void Dispose()

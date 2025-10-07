@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ApiService.Services
 {
-    internal class CrudAPIService<T> : ICrudAPIService<T> where T : class
+    public class CrudAPIService<T> : ICrudAPIService<T> where T : class
     {
         private HttpClient _client;
         private readonly string _url;

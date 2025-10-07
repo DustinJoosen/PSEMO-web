@@ -18,10 +18,10 @@ h3, p, a {
     /* TEMP */ margin-top: 100px;
 }
 
-    .login-main-box .form-group {
-        margin: 10px;
-        border-radius: 8px;
-    }
+.login-main-box .form-group {
+    margin: 10px;
+    border-radius: 8px;
+}
 
 .submit-button {
     display: block;
@@ -33,5 +33,5 @@ h3, p, a {
     padding: 3px;
     background: none;
     border-radius: 5px;
-    border: 1px solid black;
+    border: 1px solid #d4d9de;
 }
