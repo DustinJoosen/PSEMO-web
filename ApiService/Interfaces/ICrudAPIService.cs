@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApiService.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace ApiService.Interfaces
         /// </summary>
         /// <param name="uri">Uri to send the get request to.</param>
         /// <returns>HTTP response.</returns>
-        Task<string?> Get(string uri);
+        Task<CrudApiServiceResponse?> Get(string uri);
 
         /// <summary>
         /// Sends a request for an entity to be created.
@@ -22,7 +23,7 @@ namespace ApiService.Interfaces
         /// <param name="uri">Uri to send the post request to.</param>
         /// <param name="payload">Payload to send along the request.</param>
         /// <returns>HTTP response.</returns>
-        Task<string?> Post<T>(string uri, T payload);
+        Task<CrudApiServiceResponse?> Post<T>(string uri, T payload);
 
         /// <summary>
         /// Sends a request for an entity to be updated.
@@ -31,7 +32,7 @@ namespace ApiService.Interfaces
         /// <param name="uri">Uri to send the put request to.</param>
         /// <param name="payload">Payload to send along the request.</param>
         /// <returns>HTTP response.</returns>
-        Task<string?> Put<T>(string uri, T payload);
+        Task<CrudApiServiceResponse?> Put<T>(string uri, T payload);
 
         /// <summary>
         /// Sends a request for an entity to be deleted.

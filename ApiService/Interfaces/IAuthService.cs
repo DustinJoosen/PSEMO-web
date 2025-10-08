@@ -1,4 +1,5 @@
-﻿using Infrastructure.Dtos;
+﻿using ApiService.Services;
+using Infrastructure.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,16 @@ namespace ApiService.Interfaces
         /// </summary>
         /// <param name="login">Login data.</param>
         /// <returns>The JWT token.</returns>
-        Task<string?> Login(LoginDTO login);
+        Task<CrudApiServiceResponse?> Login(LoginDTO login);
 
         /// <summary>
         /// Sends registration DTO be be registered.
         /// </summary>
         /// <param name="registration">Registration data.</param>
         /// <returns>The JWT token.</returns>
-        Task<string?> Register(RegistrationDTO registration);
+        Task<CrudApiServiceResponse?> Register(RegistrationDTO registration);
+
+        Task<CrudApiServiceResponse?> WhoAmI();
+
     }
 }

@@ -3,6 +3,8 @@
 @inject ILocalStorageJwtService LocalStorageJwtService
 @inject NavigationManager NavigationManager
 @inject ApiClient ApiClient
+@inject IPasswordPolicyService PasswordPolicy
+
 
 <PageTitle>Inloggen</PageTitle>
 
@@ -10,32 +12,102 @@
 <div class="login-main-box-holder">
     <div class="w-25 login-main-box">
         <h3 class="my-4">Inloggen</h3>
-        <EditForm method="post" Model="LoginForm" FormName="sign-in" OnValidSubmit="@Submit" >
-            <div class="form-group">
-                <InputText type="email" class="form-control" @bind-Value="LoginForm.Email" placeholder="E-mailadres"/>
-            </div>
-            <div class="form-group">
-                <InputText type="password" class="form-control" @bind-Value="LoginForm.Password" placeholder="Wachtwoord"/>
-            </div>
-            <button class="submit-button" type="submit">Inloggen</button>
-            <p><a href="/auth/register">Nog geen account?</a></p>
-        </EditForm>
+
+        <div class="form-group">
+            <input type="email" class="form-control" value="@Email"
+                   @oninput=OnEmailChange placeholder="Email" />
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" value="@Password"
+                   @oninput=OnPasswordChange placeholder="Wachtwoord" />
+        </div>
+
+        <p class="validation-message">@validationMessage</p>
+        <button class="submit-button" type="submit" @onclick=Submit disabled="@disabedForm">
+            Inloggen
+        </button>
+        <p><a href="/auth/register">Ik heb nog geen account</a></p>
     </div>
 </div>
 
 
+
 @code {
-    [SupplyParameterFromForm]
-    public LoginDTO LoginForm { get; set; } = new();
+    // Form fields.
+    public string Email = "dustin@gmail.com";
+    public string Password = "Root01!";
+
+    // Validation.
+    public string validationMessage = string.Empty;
+    public bool disabedForm => IsFormValid() ? false : true;
+
+    private bool IsFormValid()
+    {
+        if (!this.EmailInCorrectFormat(this.Email))
+        {
+            this.validationMessage = "Email is niet valide";
+            return false;
+        }
+        
+        if (!PasswordPolicy.IsPasswordValid(this.Password, out this.validationMessage))
+            return false;
+
+        return true;
+    }
 
     private async Task Submit()
     {
-        var jwt = await ApiClient.AuthService.Login(LoginForm);
-        if (jwt != null)
+        // If it's not valid, don't even try.
+        if (!this.IsFormValid())
+            return;
+
+        // Send the registration request.
+        var resp = await ApiClient.AuthService.Login(new LoginDTO
         {
-            await LocalStorageJwtService.Set(jwt);
-            NavigationManager.NavigateTo("/");
+            Email = this.Email,
+            Password = this.Password
+        });
+
+        // If something went wrong with sending the request itself.
+        if (resp == null)
+        {
+            this.validationMessage = "Kon geen verbinding maken met de server...";
+            return;
         }
 
+        // If the account couldn't be validated.
+        if (!resp.Succeeded)
+        {
+            this.validationMessage = resp.Message!;
+            return;
+        }
+
+        // Set the token, and go to the homepage.
+        await LocalStorageJwtService.Set(resp.Message!);
+        NavigationManager.NavigateTo("/");
     }
+
+    #region Validation
+
+    private void OnEmailChange(ChangeEventArgs e)
+    {
+        this.Email = e.Value!.ToString() ?? "";
+        StateHasChanged();
+        IsFormValid();
+    }
+
+    private void OnPasswordChange(ChangeEventArgs e)
+    {
+        this.Password = e.Value!.ToString() ?? "";
+        StateHasChanged();
+        IsFormValid();
+    }
+
+    private bool EmailInCorrectFormat(string email)
+    {
+        var pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        return Regex.IsMatch(email, pattern);
+    }
+
+    #endregion
 }

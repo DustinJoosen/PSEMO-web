@@ -11,10 +11,9 @@ h3, p, a {
 }
 
 .login-main-box {
-    border: 1px solid var(--main-orange);
     padding: 20px;
     border-radius: 20px;
-    box-shadow: 1px 1px 10px var(--main-lightred);
+    box-shadow: 1px 1px 10px gray;
     /* TEMP */ margin-top: 100px;
 }
 
@@ -35,3 +34,12 @@ h3, p, a {
     border-radius: 5px;
     border: 1px solid #d4d9de;
 }
+
+.validation-message {
+    color: tomato;
+}
+
+.submit-button:disabled {
+    cursor: not-allowed;
+}
+

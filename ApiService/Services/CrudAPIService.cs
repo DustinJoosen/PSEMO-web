@@ -1,41 +1,65 @@
 ﻿using ApiService.Interfaces;
+using Infrastructure.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ApiService.Services
 {
+
+    public record HttpResponseStatusMessage(int StatusCode, string Message);
+    public record CrudApiServiceResponse(string? Message, bool Succeeded);
+
     public abstract class CrudAPIService : ICrudAPIService
     {
         protected HttpClient _client;
+        protected ILocalStorageJwtService _localStorageJwtService;
+
         protected JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             WriteIndented = true
         };
 
-        public CrudAPIService(HttpClient client)
+        public CrudAPIService(HttpClient client, ILocalStorageJwtService localStorageJwtService)
         {
             this._client = client;
+            this._localStorageJwtService = localStorageJwtService;
         }
 
         /// <summary>
         /// Sends a request for an entity to be retrieved.
         /// </summary>
         /// <param name="uri">Uri to send the get request to.</param>
-        /// <returns>HTTP response.</returns>
-        public virtual async Task<string?> Get(string uri)
+        /// <returns>HTTP response. Message and succeeded</returns>
+        public virtual async Task<CrudApiServiceResponse?> Get(string uri)
         {
             try
             {
-                var response = await this._client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
-                if (!response.IsSuccessStatusCode)
-                    return null;
+                // Get and set the authorization token.
+                var jwt = await this._localStorageJwtService.Get();
+                if (jwt != null)
+                    this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-                return await response.Content.ReadAsStringAsync();
+                var response = await this._client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                var message = await response.Content.ReadAsStringAsync();
+
+                // If invalid, grab the message out of the error.
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = JsonSerializer.Deserialize<HttpResponseStatusMessage>(message, this._jsonOptions);
+                    message = error!.Message;
+                }
+
+                return new(
+                    Message: message,
+                    Succeeded: response.IsSuccessStatusCode
+                );
             }
             catch
             {
@@ -49,20 +73,34 @@ namespace ApiService.Services
         /// <typeparam name="T">Type of payload.</typeparam>
         /// <param name="uri">Uri to send the post request to.</param>
         /// <param name="payload">Payload to send along the request.</param>
-        /// <returns>HTTP response.</returns>
+        /// <returns>HTTP response. Message and succeeded</returns>
 
-        public virtual async Task<string?> Post<T>(string uri, T payload)
+        public virtual async Task<CrudApiServiceResponse?> Post<T>(string uri, T payload)
         {
             try
             {
                 var json = JsonSerializer.Serialize(payload, this._jsonOptions);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                
-                var response = await this._client.PostAsync(uri, content);
-                if (!response.IsSuccessStatusCode)
-                    return null;
 
-                return await response.Content.ReadAsStringAsync();
+                // Get and set the authorization token.
+                var jwt = await this._localStorageJwtService.Get();
+                if (jwt != null)
+                    this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+                var response = await this._client.PostAsync(uri, content);
+                var message = await response.Content.ReadAsStringAsync();
+
+                // If invalid, grab the message out of the error.
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = JsonSerializer.Deserialize<HttpResponseStatusMessage>(message, this._jsonOptions);
+                    message = error!.Message;
+                }
+
+                return new(
+                    Message: message,
+                    Succeeded: response.IsSuccessStatusCode
+                );
             }
             catch
             {
@@ -75,19 +113,33 @@ namespace ApiService.Services
         /// </summary>
         /// <param name="uri">Uri to send the put request to.</param>
         /// <param name="payload">Payload to send along the request.</param>
-        /// <returns>The updated entity.</returns>
-        public virtual async Task<string?> Put<T>(string uri, T payload)
+        /// <returns>HTTP response. Message and succeeded</returns>
+        public virtual async Task<CrudApiServiceResponse?> Put<T>(string uri, T payload)
         {
             try
             {
                 var json = JsonSerializer.Serialize(payload, this._jsonOptions);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Get and set the authorization token.
+                var jwt = await this._localStorageJwtService.Get();
+                if (jwt != null)
+                    this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
                 var response = await this._client.PutAsync(uri, content);
+                var message = await response.Content.ReadAsStringAsync();
 
+                // If invalid, grab the message out of the error.
                 if (!response.IsSuccessStatusCode)
-                    return null;
+                {
+                    var error = JsonSerializer.Deserialize<HttpResponseStatusMessage>(message, this._jsonOptions);
+                    message = error!.Message;
+                }
 
-                return await response.Content.ReadAsStringAsync();
+                return new(
+                    Message: message,
+                    Succeeded: response.IsSuccessStatusCode
+                );
             }
             catch
             {

@@ -22,6 +22,7 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<ApiClient>();
+builder.Services.AddScoped<IPasswordPolicyService, PasswordPolicyService>();
 builder.Services.AddScoped<ILocalStorageJwtService, LocalStorageJwtService>();
 
 
