@@ -11,6 +11,7 @@ h3, p, a {
 }
 
 .login-main-box {
+    width: 350px;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 1px 1px 10px gray;
