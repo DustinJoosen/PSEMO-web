@@ -8,64 +8,6 @@ main {
     flex: 1;
 }
 
-.top-row {
-    background: linear-gradient(to right, var(--main-darkblue) 0%, var(--main-darkblue) 15%, var(--main-purple) 100%);
-    border-bottom: 1px solid #d6d5d5;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
-}
-.top-row .nav-link.auth {
-    margin-left: auto;
-}
-.top-row .nav-link a {
-    white-space: nowrap;
-    margin-left: 0.5rem;
-}
-
-.top-row ::deep a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.top-row i {
-    font-size: 25px;
-    color: white;
-}
-
-@media (max-width: 640.98px) {
-    .top-row {
-        justify-content: space-between;
-    }
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
-}
-
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
-    }
-
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
-
-    .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
-}
-
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

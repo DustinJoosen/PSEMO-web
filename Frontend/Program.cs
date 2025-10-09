@@ -1,12 +1,14 @@
 using ApiService;
 using Frontend.Components;
+using Infrastructure.Services;
+using Infrastructure.Services.Interfaces;
+using Blazored.LocalStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
 
 
 builder.Services.AddScoped(sp =>
@@ -17,7 +19,11 @@ builder.Services.AddScoped(sp =>
     return new HttpClient { BaseAddress = new Uri(backendApiUrl) };
 });
 
+builder.Services.AddBlazoredLocalStorage();
+
 builder.Services.AddScoped<ApiClient>();
+builder.Services.AddScoped<IPasswordPolicyService, PasswordPolicyService>();
+builder.Services.AddScoped<ILocalStorageJwtService, LocalStorageJwtService>();
 
 
 var app = builder.Build();

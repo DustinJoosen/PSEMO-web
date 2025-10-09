@@ -1,44 +1,65 @@
 ﻿using ApiService.Interfaces;
+using Infrastructure.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ApiService.Services
 {
-    internal class CrudAPIService<T> : ICrudAPIService<T> where T : class
-    {
-        private HttpClient _client;
-        private readonly string _url;
 
-        private JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+    public record HttpResponseStatusMessage(int StatusCode, string Message);
+    public record CrudApiServiceResponse(string? Message, bool Succeeded);
+
+    public abstract class CrudAPIService : ICrudAPIService
+    {
+        protected HttpClient _client;
+        protected ILocalStorageJwtService _localStorageJwtService;
+
+        protected JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             WriteIndented = true
         };
 
-        public CrudAPIService(HttpClient client, string url)
+        public CrudAPIService(HttpClient client, ILocalStorageJwtService localStorageJwtService)
         {
             this._client = client;
-            this._url = url;
+            this._localStorageJwtService = localStorageJwtService;
         }
 
         /// <summary>
-        /// Asynchronously gets all entities from the API and deserializes them.
+        /// Sends a request for an entity to be retrieved.
         /// </summary>
-        /// <returns>IEnumerable containing all entities.</returns>
-        public async Task<IEnumerable<T>?> GetAll()
+        /// <param name="uri">Uri to send the get request to.</param>
+        /// <returns>HTTP response. Message and succeeded</returns>
+        public virtual async Task<CrudApiServiceResponse?> Get(string uri)
         {
             try
             {
-                var response = await this._client.GetAsync(this._url, HttpCompletionOption.ResponseHeadersRead);
+                // Get and set the authorization token.
+                var jwt = await this._localStorageJwtService.Get();
+                if (jwt != null)
+                    this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+                var response = await this._client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                var message = await response.Content.ReadAsStringAsync();
+
+                // If invalid, grab the message out of the error.
                 if (!response.IsSuccessStatusCode)
-                    return null;
+                {
+                    var error = JsonSerializer.Deserialize<HttpResponseStatusMessage>(message, this._jsonOptions);
+                    message = error!.Message;
+                }
 
-                var contentStream = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<IEnumerable<T>>(contentStream, this._jsonOptions);
+                return new(
+                    Message: message,
+                    Succeeded: response.IsSuccessStatusCode
+                );
             }
             catch
             {
@@ -47,20 +68,39 @@ namespace ApiService.Services
         }
 
         /// <summary>
-        /// Asynchronously gets the specified entity from the API and deserializes it.
+        /// Sends a request for an entity to be created.
         /// </summary>
-        /// <param name="id">Id of the entity to find.</param>
-        /// <returns>Found entity, or null.</returns>
-        public async Task<T?> GetById(int id)
+        /// <typeparam name="T">Type of payload.</typeparam>
+        /// <param name="uri">Uri to send the post request to.</param>
+        /// <param name="payload">Payload to send along the request.</param>
+        /// <returns>HTTP response. Message and succeeded</returns>
+
+        public virtual async Task<CrudApiServiceResponse?> Post<T>(string uri, T payload)
         {
             try
             {
-                var response = await this._client.GetAsync($"{this._url}/{id}", HttpCompletionOption.ResponseHeadersRead);
+                var json = JsonSerializer.Serialize(payload, this._jsonOptions);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Get and set the authorization token.
+                var jwt = await this._localStorageJwtService.Get();
+                if (jwt != null)
+                    this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+                var response = await this._client.PostAsync(uri, content);
+                var message = await response.Content.ReadAsStringAsync();
+
+                // If invalid, grab the message out of the error.
                 if (!response.IsSuccessStatusCode)
-                    return null;
+                {
+                    var error = JsonSerializer.Deserialize<HttpResponseStatusMessage>(message, this._jsonOptions);
+                    message = error!.Message;
+                }
 
-                var contentStream = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<T>(contentStream, this._jsonOptions);
+                return new(
+                    Message: message,
+                    Succeeded: response.IsSuccessStatusCode
+                );
             }
             catch
             {
@@ -69,23 +109,37 @@ namespace ApiService.Services
         }
 
         /// <summary>
-        /// Sends a new entity to the API to be created. 
+        /// Sends a request for an entity to be updated.
         /// </summary>
-        /// <param name="dto">New entity to create.</param>
-        /// <returns>The created entity</returns>
-        public async Task<T?> Create(T dto)
+        /// <param name="uri">Uri to send the put request to.</param>
+        /// <param name="payload">Payload to send along the request.</param>
+        /// <returns>HTTP response. Message and succeeded</returns>
+        public virtual async Task<CrudApiServiceResponse?> Put<T>(string uri, T payload)
         {
             try
             {
-                var json = JsonSerializer.Serialize(dto, this._jsonOptions);
+                var json = JsonSerializer.Serialize(payload, this._jsonOptions);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await this._client.PostAsync(this._url, content);
 
-                if (response.IsSuccessStatusCode)
-                    return null;
+                // Get and set the authorization token.
+                var jwt = await this._localStorageJwtService.Get();
+                if (jwt != null)
+                    this._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-                var contentStream = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<T>(contentStream, this._jsonOptions);
+                var response = await this._client.PutAsync(uri, content);
+                var message = await response.Content.ReadAsStringAsync();
+
+                // If invalid, grab the message out of the error.
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = JsonSerializer.Deserialize<HttpResponseStatusMessage>(message, this._jsonOptions);
+                    message = error!.Message;
+                }
+
+                return new(
+                    Message: message,
+                    Succeeded: response.IsSuccessStatusCode
+                );
             }
             catch
             {
@@ -94,41 +148,15 @@ namespace ApiService.Services
         }
 
         /// <summary>
-        /// Sends an existing entity to the API to be updated.
-        /// Updates happen based on given Id.
+        /// Sends a request for an entity to be deleted.
         /// </summary>
-        /// <param name="dto">Entity to update.</param>
-        /// <returns>The updated entity.</returns>
-        public async Task<T?> Update(T dto)
-        {
-            try
-            {
-                var json = JsonSerializer.Serialize(dto, this._jsonOptions);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await this._client.PutAsync(this._url, content);
-
-                if (response.IsSuccessStatusCode)
-                    return null;
-
-                var contentStream = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<T>(contentStream, this._jsonOptions);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Sends an existing entity to the API to be deleted.
-        /// </summary>
-        /// <param name="dto">Id of the entity to delete.</param>
+        /// <param name="uri">Uri to send the delete request to.</param>
         /// <returns>Boolean indicating success</returns>
-        public async Task<bool> Delete(int id)
+        public virtual async Task<bool> Delete(string uri)
         {
             try
             {
-                var response = await this._client.DeleteAsync($"{this._url}/{id}");
+                var response = await this._client.DeleteAsync(uri);
                 return response.IsSuccessStatusCode;
             }
             catch

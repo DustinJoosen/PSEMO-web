@@ -1,0 +1,32 @@
+﻿@rendermode InteractiveServer
+@inject ILocalStorageJwtService LocalStorageJwtService
+
+<div class="top-row px-4">
+    <a class="nav-link" href="">
+        <i class="bi bi-house-door-fill"></i>
+    </a>
+    @if (!isLoggedIn)
+    {
+        <a class="nav-link auth" href="/auth/login">
+            <i class="bi bi-person-heart"></i>
+        </a>
+    }
+    else
+    {
+        <a class="nav-link auth" href="/auth/logout">
+            <i class="bi bi-door-closed"></i>
+        </a>
+    }
+</div>
+
+
+@code {
+    private bool isLoggedIn = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        this.isLoggedIn = await LocalStorageJwtService.Has();
+        await base.OnAfterRenderAsync(firstRender);
+        StateHasChanged();
+    }
+}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApiService.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,41 +7,38 @@ using System.Threading.Tasks;
 
 namespace ApiService.Interfaces
 {
-    public interface ICrudAPIService<T> where T : class
+    public interface ICrudAPIService
     {
         /// <summary>
-        /// Asynchronously gets all entities from the API and deserializes them.
+        /// Sends a request for an entity to be retrieved.
         /// </summary>
-        /// <returns>IEnumerable containing all entities.</returns>
-        Task<IEnumerable<T>?> GetAll();
+        /// <param name="uri">Uri to send the get request to.</param>
+        /// <returns>HTTP response.</returns>
+        Task<CrudApiServiceResponse?> Get(string uri);
 
         /// <summary>
-        /// Asynchronously gets the specified entity from the API and deserializes it.
+        /// Sends a request for an entity to be created.
         /// </summary>
-        /// <param name="id">Id of the entity to find.</param>
-        /// <returns>Found entity, or null.</returns>
-        Task<T?> GetById(int id);
+        /// <typeparam name="T">Type of payload.</typeparam>
+        /// <param name="uri">Uri to send the post request to.</param>
+        /// <param name="payload">Payload to send along the request.</param>
+        /// <returns>HTTP response.</returns>
+        Task<CrudApiServiceResponse?> Post<T>(string uri, T payload);
 
         /// <summary>
-        /// Sends a new entity to the API to be created. 
+        /// Sends a request for an entity to be updated.
         /// </summary>
-        /// <param name="dto">New entity to create.</param>
-        /// <returns>The created entity.</returns>
-        Task<T?> Create(T dto);
-        
-        /// <summary>
-        /// Sends an existing entity to the API to be updated.
-        /// Updates happen based on given Id.
-        /// </summary>
-        /// <param name="dto">Entity to update.</param>
-        /// <returns>The updated entity.</returns>
-        Task<T?> Update(T dto);
+        /// <typeparam name="T">Type of payload.</typeparam>
+        /// <param name="uri">Uri to send the put request to.</param>
+        /// <param name="payload">Payload to send along the request.</param>
+        /// <returns>HTTP response.</returns>
+        Task<CrudApiServiceResponse?> Put<T>(string uri, T payload);
 
         /// <summary>
-        /// Sends an existing entity to the API to be deleted.
+        /// Sends a request for an entity to be deleted.
         /// </summary>
-        /// <param name="dto">Id of the entity to delete.</param>
+        /// <param name="uri">Uri to send the delete request to.</param>
         /// <returns>Boolean indicating success</returns>
-        Task<bool> Delete(int id);
+        Task<bool> Delete(string uri);
     }
 }
