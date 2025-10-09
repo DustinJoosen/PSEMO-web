@@ -41,16 +41,16 @@
 @code {
 
     // Form fields.
-    public string Email = "dustin@gmail.com";
-    public string Username = "Syter";
-    public string Password = "Root01!";
-    public string PasswordConfirmation = "Root01!";
+    public string Email = "";
+    public string Username = "";
+    public string Password = "";
+    public string PasswordConfirmation = "";
 
     // Validation.
-    public string validationMessage = string.Empty;
+    public string validationMessage = "";
     public bool disabedForm => IsFormValid() ? false : true;
 
-    private bool IsFormValid()
+    public bool IsFormValid()
     {
         if (string.IsNullOrWhiteSpace(this.Username))
         {
@@ -72,7 +72,7 @@
 
         if (!PasswordPolicy.IsPasswordValid(this.Password, out this.validationMessage))
             return false;
-
+        
         return true;
     }
 
@@ -139,7 +139,7 @@
         IsFormValid();
     }
 
-    private bool EmailInCorrectFormat(string email)
+    public bool EmailInCorrectFormat(string email)
     {
         var pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
         return Regex.IsMatch(email, pattern);
