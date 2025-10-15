@@ -1,0 +1,54 @@
+﻿@rendermode InteractiveServer
+
+<div id="editable-map" style="width: 100%; height: 100%;"></div>
+
+@code {
+
+    [Inject]
+    IJSRuntime JSRuntime { get; set; }
+
+    /// <summary>
+    /// The page using the EditableMap can bind a method to handle the Clicked lat/lng.
+    /// <code>
+    /// &lt;EditableMap OnClickLocation="SetSelectedLocation"&gt;&lt;/EditableMap&gt;
+    /// </code>
+    /// </summary>
+    [Parameter]
+    public EventCallback<(double Lat, double Lng)> OnClickLocation { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await this.SetDotnetHelper();
+            await this.InitializeMap();
+        }
+    }
+
+    /// <summary>
+    /// Calls the javascript function "initializeEditableMap" with lat/lng parameters.
+    /// </summary>
+    private async Task InitializeMap() =>
+        await JSRuntime.InvokeVoidAsync("initializeEditableMap", 52.3558672, 5.224798);
+
+    /// <summary>
+    /// Creates a reference to this component that can be passed to the javascript.
+    /// This way, the javascript can call methods in this file too. Two-way communication.
+    /// </summary>
+    private async Task SetDotnetHelper() {
+        var dotNetHelper = DotNetObjectReference.Create(this);
+        await JSRuntime.InvokeVoidAsync("window.setDotNetHelper", dotNetHelper);
+    }
+
+    /// <summary>
+    /// This method is invoked from the javascript, when you click on an (editable) map.
+    /// It passes in the latitude and longitude of where you clicked. The method then
+    /// passes those values back to the EventCallback.
+    /// </summary>
+    /// <param name="lat">Latitude</param>
+    /// <param name="lng">Longitude</param>
+    [JSInvokable]
+    public async Task OnMapSelect(double lat, double lng) =>
+        await this.OnClickLocation.InvokeAsync((lat, lng));
+}

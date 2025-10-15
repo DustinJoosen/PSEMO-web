@@ -1,0 +1,21 @@
+﻿@rendermode InteractiveServer
+
+<div id="viewable-map" style="width: 500px; height: 500px;"></div>
+
+@code {
+    [Inject]
+    IJSRuntime JSRuntime { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await this.InitializeMap();
+    }
+
+    /// <summary>
+    /// Calls the javascript function "initializeViewableMap" with lat/lng parameters.
+    /// </summary>
+    private async Task InitializeMap() =>
+        await JSRuntime.InvokeVoidAsync("initializeViewableMap", 52.3558672, 5.224798);
+
+}
