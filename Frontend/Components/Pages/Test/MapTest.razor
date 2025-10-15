@@ -1,0 +1,27 @@
+﻿@page "/map/test"
+@rendermode InteractiveServer
+
+
+<div style="width: 100%; height: 200px;">
+    <CoordinateMap OnClickLocation="SetSelectedLocation"></CoordinateMap>
+</div>
+
+Latitude:
+<input type="text" value="@Coordinates.Lat" readonly />
+Longitude:
+<input type="text" value="@Coordinates.Lng" readonly />
+
+
+<div style="width: 500px; height: 500px; margin-top: 10px;">
+    <ViewableMap></ViewableMap>
+</div>
+
+
+@code {
+    public (double Lat, double Lng) Coordinates;
+
+    protected async Task SetSelectedLocation((double Lat, double Lng) coords)
+    {
+        this.Coordinates = coords;
+    } 
+}    
