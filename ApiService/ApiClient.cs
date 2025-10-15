@@ -14,6 +14,7 @@ namespace ApiService
         private HttpClient _client;
 
         public IAuthService AuthService { get; set; }
+        public ILocationService LocationService { get; set; }
 
         public ApiClient(HttpClient client, ILocalStorageJwtService localStorageJwtService)
         {
@@ -22,6 +23,7 @@ namespace ApiService
                 return;
 
             this.AuthService = new AuthService(client, localStorageJwtService);
+            this.LocationService = new LocationService(client, localStorageJwtService);
         }
 
         public void Dispose()
