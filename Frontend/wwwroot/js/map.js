@@ -74,7 +74,7 @@ window.addMapMarker = (lat, lng, title, isCoordinateMap = false) => {
         return;
     }
 
-    let marker = L.marker([lat, lng]).addTo(layerGroup);
+    var marker = L.marker([lat, lng]).addTo(layerGroup);
     if (title != null) {
         marker.bindPopup("<b>" + title + "</b>")
     }
