@@ -20,7 +20,7 @@ public class PasswordPolicyServiceTests
 
         // Assert.
         Assert.AreEqual(succeeded, true);
-        Assert.AreEqual(validationMessage, null);
+        Assert.AreEqual(validationMessage, string.Empty);
     }
 
     [TestMethod]
@@ -35,9 +35,9 @@ public class PasswordPolicyServiceTests
 
         // Assert.
         Assert.AreEqual(succeeded, true);
-        Assert.AreEqual(validationMessage, null);
+        Assert.AreEqual(validationMessage, string.Empty);
     }
-    
+
     [TestMethod]
     public void EmptyPassword()
     {

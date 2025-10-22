@@ -1,15 +1,24 @@
 ﻿@rendermode InteractiveServer
 
-<div id="viewable-map" style="width: 100%; height: 100%;"></div>
+<div id="viewable-map" style="width: 100%; height: 100%; border-radius: 5px"></div>
 
 @code {
     [Inject]
     IJSRuntime JSRuntime { get; set; }
 
+    [Parameter]
+    public List<(double Lat, double Lng, string Title)> Coordinates { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await this.InitializeMap();
+        await this.DisplayCurrentCoordinates();
+
+        foreach (var coord in this.Coordinates)
+        {
+            await this.AddMapMarker(coord.Lat, coord.Lng, coord.Title);
+        }
+
     }
 
     /// <summary>
@@ -17,5 +26,11 @@
     /// </summary>
     private async Task InitializeMap() =>
         await JSRuntime.InvokeVoidAsync("initializeViewableMap", 52.3558672, 5.224798);
+
+    private async Task AddMapMarker(double lat, double lng, string title) =>
+        await JSRuntime.InvokeVoidAsync("addMapMarker", lat, lng, title);
+
+    private async Task DisplayCurrentCoordinates() =>
+        await JSRuntime.InvokeVoidAsync("displayCurrentCoordinates", false);
 
 }
