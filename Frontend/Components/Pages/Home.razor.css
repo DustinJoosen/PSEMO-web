@@ -79,3 +79,30 @@
     font-size: 12px;
     margin: 1px;
 }
+
+
+@media only screen and (max-width: 600px) {
+    .filter-section {
+        display: none;
+    }
+
+    .map-section {
+        margin-bottom: 30px;
+        width: 100%;
+        position: sticky;
+    }
+
+    .location-cards-section {
+        width: 100%;
+        height: 40vh;
+    }
+
+    .location-cards-section .location {
+        margin: 25px;
+        width: 100%;
+    }
+
+    .main {
+        flex-direction: column;
+    }
+}

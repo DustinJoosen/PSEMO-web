@@ -9,25 +9,22 @@
         Hier komen de filters en zoek-shit
     </div>
     <div class="location-cards-section col-4">
-        @for (int i = 0; i < 5; i++)
+        @foreach (var location in Locations)
         {
-            @foreach (var location in Locations)
-            {
-                <div class="row location">
-                    <div class="location-image">
-                        <img src="@location.ImagePath" />
-                    </div>
-                    <div class="location-info">
-                        <div class="location-info-content">
-                            <p class="location-info-name">@location.Name</p>
-                            <p class="location-info-filter">Filter 1</p>
-                            <p class="location-info-filter">Filter 2</p>
-                            <p class="location-info-filter">Filter 3</p>
-                            <button class="location-info-btn">Zien</button>
-                        </div>
+            <div class="row location">
+                <div class="location-image">
+                    <img src="@location.ImagePath" />
+                </div>
+                <div class="location-info">
+                    <div class="location-info-content">
+                        <p class="location-info-name">@location.Name</p>
+                        <p class="location-info-filter">Filter 1</p>
+                        <p class="location-info-filter">Filter 2</p>
+                        <p class="location-info-filter">Filter 3</p>
+                        <button class="location-info-btn">Zien</button>
                     </div>
                 </div>
-            }
+            </div>
         }
     </div>
 
@@ -48,16 +45,19 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
-        var locations = await this.ApiClient.LocationService.Get();
 
-        if (firstRender && locations != null)
+        if (firstRender)
         {
-            this.Locations = locations;
-            this.Coordinates = locations.Select(location => 
-                (location.Latitude, location.Longitude, location.Name)).ToList();
+            this.Locations = await this.ApiClient.LocationService.Get() ?? [];
+            this.Coordinates = this.Locations.Select(location => (
+                Convert.ToDouble(location.Latitude), 
+                Convert.ToDouble(location.Longitude), 
+                location.Name
+            )).ToList();
 
             StateHasChanged();
         }
+     
     }
 }
 

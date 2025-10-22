@@ -17,6 +17,10 @@ namespace ApiService.Services
         {
         }
 
+        /// <summary>
+        /// Returns a list of all locations.
+        /// </summary>
+        /// <returns>List of locations.</returns>
         public async Task<List<LocationDTO>?> Get()
         {
             var response = await this.Get("api/location");
