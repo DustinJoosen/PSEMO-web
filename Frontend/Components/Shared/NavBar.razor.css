@@ -1,6 +1,5 @@
 ﻿.top-row {
     background: linear-gradient(to right, var(--main-darkblue) 0%, var(--main-darkblue) 15%, var(--main-purple) 100%);
-    border-bottom: 1px solid #d6d5d5;
     height: 3.5rem;
     display: flex;
     align-items: center;
