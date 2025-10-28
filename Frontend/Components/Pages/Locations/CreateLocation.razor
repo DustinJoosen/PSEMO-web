@@ -130,10 +130,10 @@
         }
     }
 
-    protected async Task SelectLocation((double Latitude, double Longitude) coords)
+    protected async Task SelectLocation((string Latitude, string Longitude) coords)
     {
-        Latitude = coords.Latitude.ToString();
-        Longitude = coords.Longitude.ToString();
+        Latitude = coords.Latitude;
+        Longitude = coords.Longitude;
         StateHasChanged();
     }
 }

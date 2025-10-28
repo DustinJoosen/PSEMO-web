@@ -2,10 +2,12 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    z-index: 5 !important;
 }
 
 main {
     flex: 1;
+    margin-top: 0px !important;
 }
 
 #blazor-error-ui {

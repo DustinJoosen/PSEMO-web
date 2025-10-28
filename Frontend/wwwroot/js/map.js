@@ -23,8 +23,6 @@ window.initializeViewableMap = (lat, lng) => {
 
     L.tileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
         subdomains: ["mt0", "mt1", "mt2", "mt3"],
-        maxNativeZoom: 13,
-        maxZoom: 13,
     }).addTo(window.viewableMap);
 }
 
