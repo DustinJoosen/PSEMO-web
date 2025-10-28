@@ -15,7 +15,7 @@ window.setDotNetHelper = (value) => {
 // Call this to initialize a view map, at a given latitude and longitude.
 window.initializeViewableMap = (lat, lng) => {
     if (window.viewableMap != null) {
-        return;
+        window.viewableMap.remove();
     }
 
     window.viewableMap = L.map("viewable-map").setView([lat, lng], 12);
@@ -29,7 +29,7 @@ window.initializeViewableMap = (lat, lng) => {
 // Call this to initialize a coordinate map, at a given latitude and longitude.
 window.initializeCoordinateMap = (lat, lng) => {
     if (window.coordinateMap != null) {
-        return;
+        window.coordinateMap.remove();
     }
 
     window.coordinateMap = L.map("coordinate-map").setView([lat, lng], 12);
