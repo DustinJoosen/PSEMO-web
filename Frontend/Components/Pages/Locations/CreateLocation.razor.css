@@ -1,0 +1,21 @@
+
+
+.location-main-box-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.location-main-box {
+    border: 2px solid orange;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 1px 1px 10px gray;
+    width: 600px;
+    min-height: 300px;
+    text-align: left;
+}
+
+.filters-list {
+    margin: auto;
+}
