@@ -11,15 +11,21 @@
             <input @bind="Name" class="form-control" />
         </div>
 
-        <div class="form-group">
-            <label>Latitude:</label>
-            <input @bind="Latitude" class="form-control" />
+        <div class="form-group coordinate-map">
+            <label>Location:</label>
+            <CoordinateMap OnClickLocation="SelectLocation">
+            </CoordinateMap>
         </div>
 
         <div class="form-group">
-            <label>Longitude:</label>
-            <input @bind="Longitude" class="form-control" />
-        </div>
+              <label>Latitude:</label>
+              <input @bind="Latitude" class="form-control" />
+          </div>
+
+          <div class="form-group">
+              <label>Longitude:</label>
+              <input @bind="Longitude" class="form-control" />
+            </div> 
 
         <div class="form-group">
             <label>Contact:</label>
@@ -122,6 +128,13 @@
             StateHasChanged();
             await base.OnAfterRenderAsync(firstRender);
         }
+    }
+
+    protected async Task SelectLocation((double Latitude, double Longitude) coords)
+    {
+        Latitude = coords.Latitude.ToString();
+        Longitude = coords.Longitude.ToString();
+        StateHasChanged();
     }
 
     public class FilterOption
