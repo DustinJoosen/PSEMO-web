@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-            <label>Open van af:</label>
+            <label>Open vanaf:</label>
             <input type="time" @bind="OpeningAt" class="form-control" />
         </div>
 
@@ -135,12 +135,5 @@
         Latitude = coords.Latitude.ToString();
         Longitude = coords.Longitude.ToString();
         StateHasChanged();
-    }
-
-    public class FilterOption
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public bool IsSelected { get; set; }
     }
 }
