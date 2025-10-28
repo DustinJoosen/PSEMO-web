@@ -1,0 +1,139 @@
+﻿@page "/location/createlocation"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<div class="location-main-box-holder">
+    <div class="location-main-box">
+        <h3>Create Location</h3>
+
+        <div class="form-group">
+            <label>Naam:</label>
+            <input @bind="Name" class="form-control" />
+        </div>
+
+        <div class="form-group coordinate-map">
+            <label>Location:</label>
+            <CoordinateMap OnClickLocation="SelectLocation">
+            </CoordinateMap>
+        </div>
+
+        <div class="form-group">
+              <label>Latitude:</label>
+              <input @bind="Latitude" class="form-control" />
+          </div>
+
+          <div class="form-group">
+              <label>Longitude:</label>
+              <input @bind="Longitude" class="form-control" />
+            </div> 
+
+        <div class="form-group">
+            <label>Contact:</label>
+            <input @bind="Contact" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Open vanaf:</label>
+            <input type="time" @bind="OpeningAt" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Sluit om:</label>
+            <input type="time" @bind="ClosingAt" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Capaciteit:</label>
+            <input type="number" min="1" @bind="Capacity" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label>Beschrijving:</label>
+            <textarea @bind="Description" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Foto uploaden:</label>
+            <InputFile OnChange="OnImageSelected" class="form-control" />
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label>Filters:</label>
+            <div class="filters-list row">
+                @foreach (var filter in Filters)
+                {
+                    <div class="form-check col-4">
+                        <input type="checkbox" class="form-check-input"
+                               @bind="filter.IsSelected" id="filter_@filter.Id" />
+                        <label class="form-check-label" for="filter_@filter.Id">@filter.Name</label>
+                    </div>
+                }
+            </div>
+            @if (!string.IsNullOrEmpty(ImagePreviewUrl))
+            {
+                <div class="mt-2">
+                    <img src="@ImagePreviewUrl" alt="Preview" style="max-width: 300px; border-radius: 8px;" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Inject]
+    public ApiClient apiClient { get; set; } = null!;
+
+    // Form fields
+    public string Name = "";
+    public string Latitude = "";
+    public string Longitude = "";
+    public string Contact = "";
+    public DateTime OpeningAt;
+    public DateTime ClosingAt;
+    public int Capacity = 1;
+    public string Description = "";
+    public string ImagePath = "";
+
+    private IBrowserFile? UploadedFile;
+    private string? ImagePreviewUrl;
+    private string? UploadedImagePath;
+
+    private async Task OnImageSelected(InputFileChangeEventArgs e)
+    {
+        UploadedFile = e.File;
+
+        // Toon een lokale preview
+        var buffer = new byte[UploadedFile.Size];
+        await UploadedFile.OpenReadStream(maxAllowedSize: 10_000_000).ReadAsync(buffer);
+        string base64 = Convert.ToBase64String(buffer);
+        ImagePreviewUrl = $"data:{UploadedFile.ContentType};base64,{base64}";
+
+        // Upload het bestand naar je API (voorbeeld)
+        using var content = new MultipartFormDataContent();
+        var fileContent = new StreamContent(UploadedFile.OpenReadStream(maxAllowedSize: 10_000_000));
+        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(UploadedFile.ContentType);
+        content.Add(fileContent, "file", UploadedFile.Name);
+    }
+
+    // Filterlijst (mock of later via API)
+    public List<AllFiltersDTO>? Filters = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender){
+            Filters = await apiClient.FilterService.GetFilters();
+            StateHasChanged();
+            await base.OnAfterRenderAsync(firstRender);
+        }
+    }
+
+    protected async Task SelectLocation((double Latitude, double Longitude) coords)
+    {
+        Latitude = coords.Latitude.ToString();
+        Longitude = coords.Longitude.ToString();
+        StateHasChanged();
+    }
+}

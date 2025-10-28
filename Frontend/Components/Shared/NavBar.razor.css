@@ -4,6 +4,7 @@
     display: flex;
     align-items: center;
     z-index: 6 !important;
+    margin-bottom: 3.5rem;
 }
 
 .top-row .nav-link.auth {
