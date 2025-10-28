@@ -1,4 +1,8 @@
 ﻿
+.main {
+    margin-top: 30px;
+}
+
 .filter-section {
     visibility: hidden;
     background-color: #ff7171;
@@ -89,12 +93,15 @@
     .map-section {
         margin-bottom: 30px;
         width: 100%;
+        height: 350px;
         position: sticky;
+        order: 1;
     }
 
     .location-cards-section {
         width: 100%;
         height: 40vh;
+        order: 2;
     }
 
     .location-cards-section .location {
