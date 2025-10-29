@@ -6,25 +6,19 @@
 
 <div class="main row">
     <div class="col-4 filter-section">
-        Hier komen de filters en zoek-shit
     </div>
-    <div class="location-cards-section col-4">
+    <div class="middle-cards-section col-4">
+        <div class="location-selection-holder">
+            <div class="form-group">
+                <input class="form-control" id="enter-location-places-field" type="text" 
+                    @bind="selectedLocation" placeholder="Waar wilt uw zoeken?" autofocus />
+            </div>
+            <button @onclick=MoveToCurrentLocation>Gebruik mijn locatie</button>
+        </div>
+
         @foreach (var location in Locations)
         {
-            <div class="row location">
-                <div class="location-image">
-                    <img src="@location.ImagePath" />
-                </div>
-                <div class="location-info">
-                    <div class="location-info-content">
-                        <p class="location-info-name">@location.Name</p>
-                        <p class="location-info-filter">Filter 1</p>
-                        <p class="location-info-filter">Filter 2</p>
-                        <p class="location-info-filter">Filter 3</p>
-                        <button class="location-info-btn">Zien</button>
-                    </div>
-                </div>
-            </div>
+            <LocationCard Location="location"></LocationCard>
         }
     </div>
 
@@ -38,6 +32,15 @@
 @code {
     [Inject]
     public ApiClient ApiClient { get; set; }
+
+    [Inject]
+    IJSRuntime JSRuntime { get; set; }
+
+    [Inject]
+    IConfiguration Configuration { get; set; }
+
+    public string selectedLocation = string.Empty;
+    public CoordinateSet selectedCoordinates = new(string.Empty, string.Empty);
 
     public List<(double Lat, double Lng, string Title)> Coordinates = [];
     public List<LocationDTO> Locations = [];
@@ -55,10 +58,59 @@
                 location.Name
             )).ToList();
 
+            await this.SetDotnetHelper();
+            await this.LoadGooglePlacesScript();
+
             StateHasChanged();
         }
-     
     }
+
+
+    /// <summary>
+    /// When clicking on the button on the site, the current location is set based on geolocation.
+    /// This also updates the variable selectedCoordinates.
+    /// </summary>
+    private async Task MoveToCurrentLocation()
+    {   
+        this.selectedCoordinates = await JSRuntime.InvokeAsync<CoordinateSet>("setMapViewCurrentLocation");
+        this.selectedLocation = string.Empty;
+    }
+
+    /// <summary>
+    /// Adds the google places script to the page. This way it's not loaded for other pages, so less heavy lifting.
+    /// </summary>
+    private async Task LoadGooglePlacesScript()
+    {
+        var googleApiKey = this.Configuration["GoogleApiKey"];
+        string scriptUrl = $"https://maps.googleapis.com/maps/api/js?key={googleApiKey}&loading=async&libraries=places&callback=initPlacesField";
+        await JSRuntime.InvokeVoidAsync("eval", $@"
+            var script = document.createElement('script');
+            script.src = '{scriptUrl}';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        ");
+    }
+
+    /// <summary>
+    /// Creates a reference to this component that can be passed to the javascript.
+    /// This way, the javascript can call methods in this file too. Two-way communication.
+    /// </summary>
+    private async Task SetDotnetHelper()
+    {
+        var dotNetHelper = DotNetObjectReference.Create(this);
+        await JSRuntime.InvokeVoidAsync("window.setDotNetHelper", dotNetHelper);
+    }
+
+    /// <summary>
+    /// This method is invoked from the javascript, when you enter a place into the textfield.
+    /// It passes in the latitude and longitude of what you selected.
+    /// </summary>
+    /// <param name="lat">Latitude</param>
+    /// <param name="lng">Longitude</param>
+    [JSInvokable]
+    public async Task OnSetCoordinates(string lat, string lng) =>
+        this.selectedCoordinates = new(lat, lng);
 }
 
 

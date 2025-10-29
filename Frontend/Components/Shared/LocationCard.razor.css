@@ -1,0 +1,68 @@
+﻿.location {
+    margin-bottom: 10px;
+}
+
+.location-info {
+    border: 1px solid #d4d9de;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin-bottom: 5px;
+    display: inline-block;
+    width: 70%;
+    height: 100px;
+    box-shadow: 1px 1px 10px #d4d9de;
+}
+
+.location-image {
+    border: 1px solid #d4d9de;
+    border-radius: 5px;
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    padding: 0;
+    margin-right: 10px;
+    box-shadow: 1px 1px 10px #d4d9de
+}
+
+    .location-image img {
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        object-fit: cover;
+    }
+
+.location-info-name {
+    margin: 0;
+    font-size: 17px;
+}
+
+.location-info-btn {
+    border: 1px solid #d4d9de;
+    padding: 5px;
+    width: 60px;
+    float: right;
+    margin-top: -40px;
+    background: none;
+    border-radius: 2px 2px 8px 2px;
+    transition: background-color linear 100ms;
+}
+
+.location-info-btn:hover {
+    background-color: rgb(250, 250, 250);
+}
+
+.location-info-filter {
+    font-size: 12px;
+    margin: 1px;
+}
+
+
+
+@media only screen and (max-width: 600px) {
+    .middle-cards-section .location {
+        margin: 25px;
+        width: 100%;
+    }
+}

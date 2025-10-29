@@ -12,7 +12,6 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await this.InitializeMap();
-        await this.DisplayCurrentCoordinates();
 
         foreach (var coord in this.Coordinates)
         {
@@ -29,8 +28,4 @@
 
     private async Task AddMapMarker(double lat, double lng, string title) =>
         await JSRuntime.InvokeVoidAsync("addMapMarker", lat, lng, title);
-
-    private async Task DisplayCurrentCoordinates() =>
-        await JSRuntime.InvokeVoidAsync("displayCurrentCoordinates", false);
-
 }
