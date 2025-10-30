@@ -10,8 +10,8 @@
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApiService\ApiService.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Business\Business.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
   </ItemGroup>
 
 </Project>

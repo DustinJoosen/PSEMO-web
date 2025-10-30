@@ -1,14 +1,18 @@
 ﻿@page "/auth/logout"
-@inject ILocalStorageJwtService LocalStorageJwtService
-@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 
 @code {
+    [Inject]
+    public ILocalStorageJwtService LocalStorageJwtService { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
-        LocalStorageJwtService.Remove();
-        NavigationManager.NavigateTo("/");
+        this.LocalStorageJwtService.Remove();
+        this.NavigationManager.NavigateTo("/");
         return base.OnAfterRenderAsync(firstRender);
     }
 }

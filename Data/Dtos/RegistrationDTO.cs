@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Dtos
+namespace Data.Dtos
 {
     public class RegistrationDTO
     {

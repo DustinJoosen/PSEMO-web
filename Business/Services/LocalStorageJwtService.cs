@@ -1,5 +1,5 @@
 ﻿using Blazored.LocalStorage;
-using Infrastructure.Services.Interfaces;
+using Business.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace Business.Services
 {
     public class LocalStorageJwtService : ILocalStorageJwtService
     {

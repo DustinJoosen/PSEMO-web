@@ -1,12 +1,11 @@
-﻿using ApiService.Services;
-using Infrastructure.Dtos;
+﻿using Data.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiService.Interfaces
+namespace Business.Services.Interfaces
 {
     public interface IAuthService
     {
@@ -15,16 +14,16 @@ namespace ApiService.Interfaces
         /// </summary>
         /// <param name="login">Login data.</param>
         /// <returns>The JWT token.</returns>
-        Task<CrudApiServiceResponse?> Login(LoginDTO login);
+        Task<RestApiServiceResponse?> Login(LoginDTO login);
 
         /// <summary>
         /// Sends registration DTO be be registered.
         /// </summary>
         /// <param name="registration">Registration data.</param>
         /// <returns>The JWT token.</returns>
-        Task<CrudApiServiceResponse?> Register(RegistrationDTO registration);
+        Task<RestApiServiceResponse?> Register(RegistrationDTO registration);
 
-        Task<CrudApiServiceResponse?> WhoAmI();
+        Task<RestApiServiceResponse?> WhoAmI();
 
     }
 }

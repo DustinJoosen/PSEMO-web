@@ -1,4 +1,4 @@
-﻿using Infrastructure.Services.Interfaces;
+﻿using Business.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace Business.Services
 {
     public class PasswordPolicyService : IPasswordPolicyService
     {

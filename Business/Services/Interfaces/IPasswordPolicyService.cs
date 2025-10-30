@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services.Interfaces
+namespace Business.Services.Interfaces
 {
     public interface IPasswordPolicyService
     {
