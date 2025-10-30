@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 builder.Services.AddScoped(sp =>
 {

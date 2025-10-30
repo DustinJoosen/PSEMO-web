@@ -48,6 +48,6 @@
     /// <param name="lat">Latitude</param>
     /// <param name="lng">Longitude</param>
     [JSInvokable]
-    public async Task OnMapSelect(string lat, string lng) =>
-        await this.OnClickLocation.InvokeAsync((lat, lng));
+    public async Task OnMapSelect(double lat, double lng) =>
+        await this.OnClickLocation.InvokeAsync((lat.ToString(), lng.ToString()));
 }

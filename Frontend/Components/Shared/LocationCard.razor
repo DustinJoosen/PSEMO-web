@@ -1,0 +1,20 @@
+﻿<div class="row location">
+    <div class="location-image">
+        <img src="@Location.ImagePath" />
+    </div>
+    <div class="location-info">
+        <div class="location-info-content">
+            <p class="location-info-name">@Location.Name</p>
+            <p class="location-info-filter">Filter 1</p>
+            <p class="location-info-filter">Filter 2</p>
+            <p class="location-info-filter">Filter 3</p>
+            <button class="location-info-btn">Zien</button>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public LocationDTO Location { get; set; }
+}

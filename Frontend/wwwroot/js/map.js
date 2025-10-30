@@ -77,30 +77,41 @@ window.addMapMarker = (lat, lng, title, isCoordinateMap = false, isBlue = true) 
     if (isBlue) {
         var marker = L.marker([lat, lng]).addTo(layerGroup);
     } else {
-        var marker = L.marker([lat, lng], { icon: redIcon  }).addTo(layerGroup);
+        var marker = L.marker([lat, lng], { icon: redIcon }).addTo(layerGroup);
     }
     if (title != null) {
         marker.bindPopup("<b>" + title + "</b>")
     }
 }
 
+window.setMapView = (lat, lng) => {
+    if (!window.viewableMap) {
+        console.error("Map is not yet initialized");
+        return;
+    }
 
-window.displayCurrentCoordinates = (isCoordinateMap = false) => {
-    if (navigator.geolocation) {
+    window.viewableMap.setView([lat, lng]);
+}
+
+window.setMapViewCurrentLocation = () => {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject("Can't access geolocation");
+            return;
+        }
         navigator.geolocation.getCurrentPosition((pos) => {
+
             var lat = pos.coords.latitude;
             var lng = pos.coords.longitude;
 
+            window.setMapView(lat, lng);
             window.addMapMarker(lat, lng, "Jouw locatie", false, false);
-        }, () => { }, {
-            enableHighAccuracy: false
-        });
-    } else {
-        alert("can't access....?");
-    }
+            resolve({ lat: lat.toString(), lng: lng.toString() })
+        })
+    })
 }
 
-var redIcon = new L.Icon({
+const redIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
