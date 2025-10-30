@@ -14,12 +14,12 @@
         <h3 class="my-4">Inloggen</h3>
 
         <div class="form-group">
-            <input type="email" class="form-control" value="@Email"
-                   @oninput=OnEmailChange placeholder="Email" />
+            <input type="email" class="form-control" value="@Email" id="auth-form-email"
+                @oninput=OnEmailChange placeholder="Email" />
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" value="@Password"
-                   @oninput=OnPasswordChange placeholder="Wachtwoord" />
+            <input type="password" class="form-control" value="@Password" id="auth-form-password"
+                @oninput=OnPasswordChange placeholder="Wachtwoord" />
         </div>
 
         <p class="validation-message">@validationMessage</p>

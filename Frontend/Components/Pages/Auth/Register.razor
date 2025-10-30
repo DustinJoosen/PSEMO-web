@@ -13,19 +13,19 @@
         <h3 class="my-4">Registreren</h3>
 
         <div class="form-group">
-            <input type="text" class="form-control" value="@Username"
+            <input type="text" class="form-control" value="@Username" id="auth-form-username"
                    @oninput=OnUsernameChange placeholder="Gebruikersnaam" />
         </div>
         <div class="form-group">
-            <input type="email" class="form-control" value="@Email"
+            <input type="email" class="form-control" value="@Email" id="auth-form-email"
                    @oninput=OnEmailChange placeholder="Email" />
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" value="@Password"
+            <input type="password" class="form-control" value="@Password" id="auth-form-password"
                    @oninput=OnPasswordChange placeholder="Wachtwoord" />
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" value="@PasswordConfirmation"
+            <input type="password" class="form-control" value="@PasswordConfirmation" id="auth-form-password-confirm"
                    @oninput=OnPasswordConfirmationChange placeholder="Bevestig Wachtwoord" />
         </div>
 
