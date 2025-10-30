@@ -1,6 +1,6 @@
 using Frontend.Components.Pages.Auth;
-using Infrastructure.Services;
-using Infrastructure.Services.Interfaces;
+using Business.Services;
+using Business.Services.Interfaces;
 
 namespace Test.Frontend.Components.Auth;
 
