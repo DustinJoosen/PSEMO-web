@@ -1,0 +1,15 @@
+{
+  "name": "werkrust_web",
+  "version": "1.0.0",
+  "description": "The web (blazor) implementation of the PSEMO Werkrust API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^15.5.0"
+  }
+}

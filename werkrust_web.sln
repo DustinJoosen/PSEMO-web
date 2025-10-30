@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiService", "ApiService\Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{8E194835-05C3-4997-8576-38773FD6DFF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{06E262DC-1AD5-496F-B857-D4F1B6CE1367}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{06E262DC-1AD5-496F-B857-D4F1B6CE1367}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
