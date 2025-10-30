@@ -1,12 +1,11 @@
-﻿using ApiService.Services;
-using Infrastructure.Dtos;
+﻿using Infrastructure.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiService.Interfaces
+namespace Business.Services.Interfaces
 {
     public interface IFilterService
     {

@@ -1,9 +1,5 @@
 ﻿@page "/auth/register"
 @rendermode InteractiveServer
-@inject ILocalStorageJwtService LocalStorageJwtService
-@inject NavigationManager NavigationManager
-@inject ApiClient ApiClient
-@inject IPasswordPolicyService PasswordPolicy
 
 <PageTitle>Registreren</PageTitle>
 
@@ -39,6 +35,17 @@
 
 
 @code {
+    [Inject]
+    public IAuthService AuthService { get; set; }
+
+    [Inject]
+    public IPasswordPolicyService PasswordPolicyService { get; set; }
+
+    [Inject]
+    public ILocalStorageJwtService LocalStorageJwtService { get; set; }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
 
     // Form fields.
     public string Email = "";
@@ -70,7 +77,7 @@
             return false;
         }
 
-        if (!PasswordPolicy.IsPasswordValid(this.Password, out this.validationMessage))
+        if (!this.PasswordPolicyService.IsPasswordValid(this.Password, out this.validationMessage))
             return false;
         
         return true;
@@ -83,7 +90,7 @@
             return;
 
         // Send the registration request.
-        var resp = await ApiClient.AuthService.Register(new RegistrationDTO
+        var resp = await this.AuthService.Register(new RegistrationDTO
         {
             Email = this.Email,
             Username = this.Username,
@@ -105,8 +112,8 @@
         }
 
         // Set the token, and go to the homepage.
-        await LocalStorageJwtService.Set(resp.Message!);
-        NavigationManager.NavigateTo("/");
+        await this.LocalStorageJwtService.Set(resp.Message!);
+        this.NavigationManager.NavigateTo("/");
     }
 
     #region Validation

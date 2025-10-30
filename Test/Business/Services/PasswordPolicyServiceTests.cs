@@ -1,7 +1,7 @@
 using Infrastructure.Services;
 using Infrastructure.Services.Interfaces;
 
-namespace Test.Infrastructure.Services;
+namespace Test.Business.Services;
 
 
 [TestClass]

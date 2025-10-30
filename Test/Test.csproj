@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiService\ApiService.csproj" />
+    <ProjectReference Include="..\Business\Business.csproj" />
     <ProjectReference Include="..\Frontend\Frontend.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>

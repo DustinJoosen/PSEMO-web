@@ -75,7 +75,10 @@
 @code {
 
     [Inject]
-    public ApiClient apiClient { get; set; } = null!;
+    public ILocationService LocationService { get; set; } = null!;
+
+    [Inject]
+    public IFilterService FilterService { get; set; } = null!;
 
     // Form fields
     public string Name = "";
@@ -115,7 +118,7 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender){
-            Filters = await apiClient.FilterService.GetFilters();
+            Filters = await this.FilterService.GetFilters();
             StateHasChanged();
             await base.OnAfterRenderAsync(firstRender);
         }

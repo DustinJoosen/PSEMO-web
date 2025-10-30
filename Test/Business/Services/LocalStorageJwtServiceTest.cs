@@ -3,7 +3,7 @@ using Infrastructure.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Test.Infrastructure.Services;
+namespace Test.Business.Services;
 
 
 [TestClass]
@@ -33,7 +33,7 @@ public class LocalStorageJwtServiceTests
     public async Task Remove()
     {
         // Arrange.
-        ILocalStorageJwtService service = this._localStorageJwtService.Object;
+        ILocalStorageJwtService service = _localStorageJwtService.Object;
 
         // Act.
         await service.Remove();

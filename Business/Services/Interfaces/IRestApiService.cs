@@ -1,20 +1,19 @@
-﻿using ApiService.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiService.Interfaces
+namespace Business.Services.Interfaces
 {
-    public interface ICrudAPIService
+    public interface IRestApiService
     {
         /// <summary>
         /// Sends a request for an entity to be retrieved.
         /// </summary>
         /// <param name="uri">Uri to send the get request to.</param>
         /// <returns>HTTP response.</returns>
-        Task<CrudApiServiceResponse?> Get(string uri);
+        Task<RestApiServiceResponse?> Get(string uri);
 
         /// <summary>
         /// Sends a request for an entity to be created.
@@ -23,7 +22,7 @@ namespace ApiService.Interfaces
         /// <param name="uri">Uri to send the post request to.</param>
         /// <param name="payload">Payload to send along the request.</param>
         /// <returns>HTTP response.</returns>
-        Task<CrudApiServiceResponse?> Post<T>(string uri, T payload);
+        Task<RestApiServiceResponse?> Post<T>(string uri, T payload);
 
         /// <summary>
         /// Sends a request for an entity to be updated.
@@ -32,7 +31,7 @@ namespace ApiService.Interfaces
         /// <param name="uri">Uri to send the put request to.</param>
         /// <param name="payload">Payload to send along the request.</param>
         /// <returns>HTTP response.</returns>
-        Task<CrudApiServiceResponse?> Put<T>(string uri, T payload);
+        Task<RestApiServiceResponse?> Put<T>(string uri, T payload);
 
         /// <summary>
         /// Sends a request for an entity to be deleted.

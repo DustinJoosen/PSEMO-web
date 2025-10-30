@@ -1,6 +1,4 @@
-﻿using ApiService.Interfaces;
-using Infrastructure.Services.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -8,14 +6,14 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Business.Services.Interfaces;
 
-namespace ApiService.Services
+namespace Business.Services
 {
-
     public record HttpResponseStatusMessage(int StatusCode, string Message);
-    public record CrudApiServiceResponse(string? Message, bool Succeeded);
+    public record RestApiServiceResponse(string? Message, bool Succeeded);
 
-    public abstract class CrudAPIService : ICrudAPIService
+    public abstract class RestApiService : IRestApiService
     {
         protected HttpClient _client;
         protected ILocalStorageJwtService _localStorageJwtService;
@@ -26,7 +24,7 @@ namespace ApiService.Services
             WriteIndented = true
         };
 
-        public CrudAPIService(HttpClient client, ILocalStorageJwtService localStorageJwtService)
+        public RestApiService(HttpClient client, ILocalStorageJwtService localStorageJwtService)
         {
             this._client = client;
             this._localStorageJwtService = localStorageJwtService;
@@ -37,7 +35,7 @@ namespace ApiService.Services
         /// </summary>
         /// <param name="uri">Uri to send the get request to.</param>
         /// <returns>HTTP response. Message and succeeded</returns>
-        public virtual async Task<CrudApiServiceResponse?> Get(string uri)
+        public virtual async Task<RestApiServiceResponse?> Get(string uri)
         {
             try
             {
@@ -75,7 +73,7 @@ namespace ApiService.Services
         /// <param name="payload">Payload to send along the request.</param>
         /// <returns>HTTP response. Message and succeeded</returns>
 
-        public virtual async Task<CrudApiServiceResponse?> Post<T>(string uri, T payload)
+        public virtual async Task<RestApiServiceResponse?> Post<T>(string uri, T payload)
         {
             try
             {
@@ -114,7 +112,7 @@ namespace ApiService.Services
         /// <param name="uri">Uri to send the put request to.</param>
         /// <param name="payload">Payload to send along the request.</param>
         /// <returns>HTTP response. Message and succeeded</returns>
-        public virtual async Task<CrudApiServiceResponse?> Put<T>(string uri, T payload)
+        public virtual async Task<RestApiServiceResponse?> Put<T>(string uri, T payload)
         {
             try
             {

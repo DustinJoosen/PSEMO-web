@@ -1,6 +1,5 @@
-﻿using ApiService.Interfaces;
+﻿using Business.Services.Interfaces;
 using Infrastructure.Dtos;
-using Infrastructure.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +7,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ApiService.Services
+namespace Business.Services
 {
-    public class FilterService : CrudAPIService, IFilterService
+    public class FilterService : RestApiService, IFilterService
     {
         public FilterService(HttpClient client, ILocalStorageJwtService localStorageJwtService) : base(client, localStorageJwtService)
         {

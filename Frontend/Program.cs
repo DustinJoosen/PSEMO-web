@@ -1,8 +1,7 @@
-using ApiService;
 using Frontend.Components;
-using Infrastructure.Services;
-using Infrastructure.Services.Interfaces;
 using Blazored.LocalStorage;
+using Business.Services.Interfaces;
+using Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +21,9 @@ builder.Services.AddScoped(sp =>
 
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddScoped<ApiClient>();
+builder.Services.AddScoped<IFilterService, FilterService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPasswordPolicyService, PasswordPolicyService>();
 builder.Services.AddScoped<ILocalStorageJwtService, LocalStorageJwtService>();
 

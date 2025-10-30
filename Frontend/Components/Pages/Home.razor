@@ -31,7 +31,7 @@
 
 @code {
     [Inject]
-    public ApiClient ApiClient { get; set; }
+    public ILocationService LocationService { get; set; } = null!;
 
     [Inject]
     IJSRuntime JSRuntime { get; set; }
@@ -51,7 +51,7 @@
 
         if (firstRender)
         {
-            this.Locations = await this.ApiClient.LocationService.Get() ?? [];
+            this.Locations = await this.LocationService.Get() ?? [];
             this.Coordinates = this.Locations.Select(location => (
                 Convert.ToDouble(location.Latitude), 
                 Convert.ToDouble(location.Longitude), 
